@@ -18,7 +18,8 @@ module.exports = env => {
     const appComponents = [
         "tns-core-modules/ui/frame",
         "tns-core-modules/ui/frame/activity",
-    ];
+        "nativescript-auth0/android/provider/redirectActivity"
+        ];
 
     const platform = env && (env.android && "android" || env.ios && "ios");
     if (!platform) {
@@ -232,8 +233,11 @@ module.exports = env => {
             // Define useful constants like TNS_WEBPACK
             new webpack.DefinePlugin({
                 "global.TNS_WEBPACK": "true",
-                "process": undefined,
-            }),
+                // "process": undefined,
+                "process.env": {
+                environment: (env && Object.prototype.hasOwnProperty.call(env, 'environment')) ? JSON.stringify(env.environment) : undefined
+                }
+                }),
             // Remove all files from the out dir.
             new CleanWebpackPlugin([`${dist}/**/*`]),
             // Copy native app resources to out dir.
